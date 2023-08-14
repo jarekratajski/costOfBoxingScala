@@ -15,10 +15,12 @@ If you don’t use abstraction, your code is hard to maintain, low-level, and fr
 One of the most refreshing facts about Rust is that ...
 
 Sounds reasonable, but all that above is more complex. 
-The Scala, Java or JVM specification does not say that there will be 12 bytes for such structures! 
-Even more, nothing in the JVM specification requires that the JVM will allocate anything on the physical heap, 
+The Scala, Java or JVM specification does not say that there will be 12 bytes for such structures!
+
+Nothing in the JVM specification requires that the JVM will allocate anything on the physical heap, 
 and that there will be any real gc use. 
-All above is an implementation detail, and while this is  true for most commonly used OpenJDK, 
+
+All above is an implementation detail, and while the quoted statement is  true for most commonly used OpenJDK, 
 or Hotspot derivatives as for 2023 it is not valid for all JVMs,  and may not be valid for future versions of OpenJDK/Hotspot. 
 More importantly, it is not true today(!!!) for GraalVM, 
 which is a more advanced JVM implementation out there, and the case presented is one that that graal optimized a long time ago.
@@ -71,6 +73,7 @@ case class Box[A](value: A)
 Tthis code performs multiple boxing - unboxing operations, which makes it quite a good example.
 
 Next, if You are already using types, you are not really using variables and loops and you are actually using functional programming.
+
 That is why I created more pure variation of the code above (using recursion):
 
 ```scala
@@ -109,10 +112,12 @@ go(OpaqueBox(27L)).value
 
 # Benchmarking
 
-Finally, I am ready to do some testing. 
-The tests were done on my regular desktop (threadripper). 
+Finally, I am ready to do some testing.
+
+The tests were done on my regular desktop (threadripper pc). 
+
 I did not invest much time into preparing clean environment for testing, and did not even take measurements for a long time - 
-but the results should be visible anyhow.
+but the results should be meaningful anyhow.
 
 The particular command I used was:
 
@@ -155,12 +160,12 @@ OpenJDK 64-Bit Server VM (build 20.0.1+9-29, mixed mode, sharing)
 
 This is exactly a result that John De Goes is describing. We have a simple imperative version
 that takes 102 ns per run. And all the wrappers induce a visible cost resulting in ~ 670 ns per operation.
-Over 6 (almost 7) times more. The notable exception is a Scala 3 use of opaque type which gives results similar 
+That is over 6 (almost 7) times more. The notable exception is a Scala 3 use of opaque type which gives results similar 
 to an imperative code. Moreover, it is clearly visible that in all the "functional" solution were putting a stress on a garbage collector
 that was performing more than 5MB allocations per second.
 
 # Graal
-The question is what happens if I run the same benchmarks on graal (22.3.1 - just a version I had at the moment of writing).
+What happens if I run the same benchmarks on graal (22.3.1 - just a version I had at the moment of writing)?
 
 
 ```
@@ -192,20 +197,22 @@ Java HotSpot(TM) 64-Bit Server VM GraalVM EE 22.3.1 (build 17.0.6+9-LTS-jvmci-22
 It is visible that all the methods are more or less equal (and faster than OpenJDK case).
 
 The reason for that is quite visible in `gc.alloc.rate` -> there were no allocations(!!!).
-Yes, graal was smart enough to find out that the code does not need any.
-What is important, all this happened on the JIT level. The allocations were in Scala code,
+Yes, the graal was smart enough to find out that the code does not need any.
+
+Interestingly, all this happened on the JIT level. The allocations were in Scala code,
 they were still visible in the bytecode (that is why analysing bytecode is quite often misleading).
-But the JIT (Graal) was able to eliminate them.
+But the JIT (Graal) was still able to eliminate them.
 
 # Conclusion
 
-I wanted to show that in order to demonstrate  2 things:
+I wanted to demonstrate  2 things:
 a) Functional code does not have to be slow - it is a matter of ever improving compilers, runtimes and platforms.
-I do agree that currently (2023) our compilers (generally) still have a lot of room for improvements. So if someone is indeed fighting for cycles 
-it is probably wise to sometimes go back in some fragments of code into imperative style. 
-However, the more FP we do the more pressure we put on vendors to provide compilers that are able to optimize such code (that is exactly 
+
+I do agree that currently (2023) our compilers (generally) still have a lot of room for improvements. If someone is indeed fighting for cycles 
+it is probably wise to sometimes go back in some fragments of code into imperative style or use lower level languages.
+On the other hand, the more FP we do the more pressure we put on vendors to provide compilers that are able to optimize such code (that is exactly 
 the case for graal).
 b) It is very easy to spread performance myths - just by sending statements that seem obvious and are actually true in some contexts.
 But they are not true in all contexts - and times, machines, compilers, runtimes, platforms are changing. The problem is that myths prevail
-and quite often become widespread just after they are in not valid anymore. So be careful when you state some absolute truths about performance,
-be suspiciou when you read them. And sometimes just try to verify.
+and quite often become widespread years after they are in not valid anymore. So be careful when you state some absolute truths about performance,
+be suspicious when you read them. And sometimes just try to verify.
