@@ -205,14 +205,13 @@ But the JIT (Graal) was still able to eliminate them.
 
 # Conclusion
 
-I wanted to demonstrate  2 things:
-a) Functional code does not have to be slow - it is a matter of ever improving compilers, runtimes and platforms.
-
+I wanted to demonstrate  2 issues:
+1. Functional code does not have to be slow - it is a matter of ever improving compilers, runtimes and platforms.
 I do agree that currently (2023) our compilers (generally) still have a lot of room for improvements. If someone is indeed fighting for cycles 
 it is probably wise to sometimes go back in some fragments of code into imperative style or use lower level languages.
 On the other hand, the more FP we do the more pressure we put on vendors to provide compilers that are able to optimize such code (that is exactly 
-the case for graal).
-b) It is very easy to spread performance myths - just by sending statements that seem obvious and are actually true in some contexts.
+the case for graal). 
+2. It is very easy to spread performance myths - just by sending statements that seem obvious and are actually true in some contexts.
 But they are not true in all contexts - and times, machines, compilers, runtimes, platforms are changing. The problem is that myths prevail
 and quite often become widespread years after they are in not valid anymore. So be careful when you state some absolute truths about performance,
 be suspicious when you read them. And sometimes just try to verify.
