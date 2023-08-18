@@ -161,7 +161,9 @@ OpenJDK 64-Bit Server VM (build 20.0.1+9-29, mixed mode, sharing)
 This is exactly a result that John De Goes is describing. We have a simple imperative version
 that takes 102 ns per run. And all the wrappers induce a visible cost resulting in ~ 670 ns per operation.
 That is over 6 (almost 7) times more. The notable exception is a Scala 3 use of opaque type which gives results similar 
-to an imperative code. Moreover, it is clearly visible that in all the "functional" solution were putting a stress on a garbage collector
+to an imperative code. 
+
+It is clearly visible that in all "functional" solutions were putting a stress on a garbage collector
 that was performing more than 5MB allocations per second.
 
 # Graal
@@ -206,7 +208,7 @@ But the JIT (Graal) was still able to eliminate them.
 # Conclusion
 
 I wanted to demonstrate  2 issues:
-1. Functional code does not have to be slow - it is a matter of ever improving compilers, runtimes and platforms.
+1. Functional code does not have to be slow/unfriendly to cpus - it is only a matter of ever improving compilers, runtimes and platforms.
 I do agree that currently (2023) our compilers (generally) still have a lot of room for improvements. If someone is indeed fighting for cycles 
 it is probably wise to sometimes go back in some fragments of code into imperative style or use lower level languages.
 On the other hand, the more FP we do the more pressure we put on vendors to provide compilers that are able to optimize such code (that is exactly 
