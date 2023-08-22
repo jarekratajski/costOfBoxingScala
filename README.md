@@ -29,10 +29,10 @@ which is a more advanced JVM implementation, and the case presented is one that 
 # Examination
 
 I will examine the original claim. We will use Scala 3.3 (but it does not matter), OpenJDK (`17.0.6`), and GraalVM (`22.3.1`).
-I will use `JMH`, and `sbt` - with jmh plugin to measure the performance.
+Let's use `JMH`, and `sbt` with `jmh plugin` to measure the performance.
 
 
-I will use popular [Collatz conjecture](https://en.wikipedia.org/wiki/Collatz_conjecture)  as an example for benchmarking:
+A popular [Collatz conjecture](https://en.wikipedia.org/wiki/Collatz_conjecture)  is used in this example for benchmarking:
 ```scala
   @Benchmark
   def longCollatz(): Long =
@@ -112,14 +112,14 @@ go(OpaqueBox(27L)).value
 
 # Benchmarking
 
-Finally, I am ready to do some testing.
+Eventually, I am ready to do some testing.
 
 The tests were done on my regular desktop (Threadripper CPU). 
 
 I did not invest much time into preparing clean environment for testing, and did not even take measurements for a long time - 
 but the results should be meaningful anyhow.
 
-The particular command I used was:
+The exact command I used was:
 
 `sbt "jmh:run -prof gc -w 2s -r 5s -wi 3 -i 3 -f 3 jmh.CaseBoxing"`
 
