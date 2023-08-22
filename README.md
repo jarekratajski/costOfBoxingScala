@@ -28,7 +28,7 @@ which is a more advanced JVM implementation, and the case presented is one that 
 
 # Examination
 
-I will examine the original claim. We will use Scala 3.3 (but it does not matter), OpenJDK (xxx), and GraalVM (yyy).
+I will examine the original claim. We will use Scala 3.3 (but it does not matter), OpenJDK (`17.0.6`), and GraalVM (`22.3.1`).
 I will use `JMH`, and `sbt` - with jmh plugin to measure the performance.
 
 
